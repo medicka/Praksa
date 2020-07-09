@@ -12,9 +12,16 @@ public class UserDTO {
 	
 	@NotEmpty
 	@NotBlank
-	private String name;
+	private String username;
 	
 	@NotEmpty
 	@NotBlank
-	private String surname;
+	private String password;
+	
+	
+	/*
+	 * @NotEmpty
+	 * 
+	 * @NotBlank private String surname;
+	 */
 }

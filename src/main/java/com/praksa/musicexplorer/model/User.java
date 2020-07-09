@@ -10,34 +10,44 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import lombok.ToString;
-
+@Data
 @ToString(callSuper=true,exclude={"id", "likesSongs", "likesAlbums", "likesArtists"})
 @Entity
 @Table(name="tbl_user")
 public class User {
 	
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	@Id
 	@GeneratedValue
 	@Column(name="id")
-	@Getter @Setter private Long id;
+	private Long id;
 	
-	@Column(name="name", nullable=false)
-	@Getter @Setter private String name;
+	@Column(name="username", nullable=false)
+	private String username;
 	
-	@Column(name="surname", nullable=false)
-	@Getter @Setter private String surname;
+	@Column(name="password", nullable=false)
+	private String password;
+	
+	
+	/*
+	 * @Column(name="surname", nullable=false)
+	 * 
+	 * @Getter @Setter private String surname;
+	 */
+	@OneToMany(mappedBy="user")
+	private List<LikeSong> likesSongs = new ArrayList<>();
 	
 	@OneToMany(mappedBy="user")
-	@Getter @Setter private List<LikeSong> likesSongs = new ArrayList<>();
+	private List<LikeAlbum> likesAlbums = new ArrayList<>();
 	
 	@OneToMany(mappedBy="user")
-	@Getter @Setter private List<LikeAlbum> likesAlbums = new ArrayList<>();
-	
-	@OneToMany(mappedBy="user")
-	@Getter @Setter private List<LikeArtist> likesArtists = new ArrayList<>();
+	private List<LikeArtist> likesArtists = new ArrayList<>();
 	
 	public void addLikeSong(LikeSong likeS) {
 		this.likesSongs.add(likeS);
@@ -49,5 +59,11 @@ public class User {
 	
 	public void addLikeArtist(LikeArtist likeArt) {
 		this.likesArtists.add(likeArt);
+	}
+
+	public User(String userName, String password) {
+		super();
+		this.username = userName;
+		this.password = password;
 	}
 }

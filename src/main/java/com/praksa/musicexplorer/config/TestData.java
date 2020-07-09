@@ -1,16 +1,19 @@
-package com.praksa.musicexplorer;
-
-import javax.annotation.PostConstruct;
+package com.praksa.musicexplorer.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.praksa.musicexplorer.model.Album;
 import com.praksa.musicexplorer.model.Artist;
 import com.praksa.musicexplorer.model.Song;
+import com.praksa.musicexplorer.model.User;
 import com.praksa.musicexplorer.service.AlbumService;
 import com.praksa.musicexplorer.service.ArtistService;
 import com.praksa.musicexplorer.service.SongService;
+import com.praksa.musicexplorer.service.UserService;
 
 @Component
 public class TestData {
@@ -24,10 +27,20 @@ public class TestData {
 	@Autowired
 	private ArtistService artistService;
 	
+	@Autowired
+	private UserService userService;
 	
-	@PostConstruct
-	public void init() {
+	@Autowired
+	PasswordEncoder encoder;
+	
+	@EventListener
+	public void seed(ContextRefreshedEvent event) {		
 		
+		  User user1 = new User("Nina",  encoder.encode("password")); 
+		  /*user1.setUserName("Nina"); 
+		  encoder.encode("password");*/
+		  userService.save(user1);
+		 
 		Artist artist1 = new Artist ();
 		artist1.setName("Šinobusi");
 		artistService.save(artist1);

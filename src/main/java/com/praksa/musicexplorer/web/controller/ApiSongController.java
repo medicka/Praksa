@@ -1,5 +1,6 @@
 package com.praksa.musicexplorer.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import com.praksa.musicexplorer.web.dto.SongDTO;
 
 
 @RestController
-@RequestMapping(value="/api/songs")
+//@RequestMapping(value="/api/songs")
 public class ApiSongController {
 	
 	@Autowired
@@ -31,10 +32,10 @@ public class ApiSongController {
 	
 	private SongMapper songMapper;
 	
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value="/getAll", method = RequestMethod.GET)
 	public ResponseEntity<List<SongDTO>> getSongs(
 			@RequestParam(required = false) String name,
-			@RequestParam(required = false) Long albumId) {
+			@RequestParam(required = false) Long albumId) throws Exception{
 		
 		List<Song> songs = null;
 		
@@ -46,10 +47,16 @@ public class ApiSongController {
 		}		
 		
 		if (songs == null || songs.isEmpty()) {
+			System.out.println("songs is null");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+		List<SongDTO> songsDTO = new ArrayList<SongDTO>();
+		for(Song s:songs) {
+			songsDTO.add(songMapper.toSongDTO(s));
+		}
 
-		return new ResponseEntity<>(songMapper.toSongDTOs(songs), HttpStatus.OK);
+		System.out.println("songs is not null");
+		return new ResponseEntity<>(songsDTO, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
