@@ -1,5 +1,6 @@
 package com.praksa.musicexplorer.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,6 @@ public class ApiAlbumController {
 	@Autowired
 	private AlbumService albumService;
 	
-	private AlbumMapper albumMapper;
-	
 	
 	@RequestMapping(method=RequestMethod.GET)
 	ResponseEntity<List<AlbumDTO>> getAlbums(){
@@ -38,7 +37,11 @@ public class ApiAlbumController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<>(albumMapper.toAlbumDTOs(albums), HttpStatus.OK);
+		List<AlbumDTO> albumsDTO = new ArrayList<>();
+		for(Album a:albums) {
+			albumsDTO.add(AlbumMapper.INS_ALBUM.toAlbumDTO(a));
+		}
+		return new ResponseEntity<>(albumsDTO, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
@@ -50,7 +53,7 @@ public class ApiAlbumController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<>(albumMapper.toAlbumDTO(album), HttpStatus.OK);
+		return new ResponseEntity<>(AlbumMapper.INS_ALBUM.toAlbumDTO(album), HttpStatus.OK);
 	}
 	
 	
@@ -62,9 +65,9 @@ public class ApiAlbumController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Album savedAlbum = albumService.save(albumMapper.toAlbum(newAlbum));
+		Album savedAlbum = albumService.save(AlbumMapper.INS_ALBUM.toAlbum(newAlbum));
 		
-		return new ResponseEntity<>(albumMapper.toAlbumDTO(savedAlbum), HttpStatus.CREATED);
+		return new ResponseEntity<>(AlbumMapper.INS_ALBUM.toAlbumDTO(savedAlbum), HttpStatus.CREATED);
 	}
 	
 	
@@ -81,9 +84,9 @@ public class ApiAlbumController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Album persisted = albumService.save(albumMapper.toAlbum(albumDTO));
+		Album persisted = albumService.save(AlbumMapper.INS_ALBUM.toAlbum(albumDTO));
 		
-		return new ResponseEntity<>(albumMapper.toAlbumDTO(persisted),HttpStatus.OK);
+		return new ResponseEntity<>(AlbumMapper.INS_ALBUM.toAlbumDTO(persisted),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)

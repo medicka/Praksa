@@ -24,15 +24,14 @@ import com.praksa.musicexplorer.web.dto.SongDTO;
 
 
 @RestController
-//@RequestMapping(value="/api/songs")
+@RequestMapping(value="/api/songs")
 public class ApiSongController {
 	
 	@Autowired
 	private SongService songService;
+
 	
-	private SongMapper songMapper;
-	
-	@RequestMapping(value="/getAll", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<SongDTO>> getSongs(
 			@RequestParam(required = false) String name,
 			@RequestParam(required = false) Long albumId) throws Exception{
@@ -52,7 +51,7 @@ public class ApiSongController {
 		}
 		List<SongDTO> songsDTO = new ArrayList<SongDTO>();
 		for(Song s:songs) {
-			songsDTO.add(songMapper.toSongDTO(s));
+			songsDTO.add(SongMapper.INS_SONG.toSongDTO(s));
 		}
 
 		System.out.println("songs is not null");
@@ -68,7 +67,7 @@ public class ApiSongController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<>(songMapper.toSongDTO(song), HttpStatus.OK);
+		return new ResponseEntity<>(SongMapper.INS_SONG.toSongDTO(song), HttpStatus.OK);
 	}
 	
 	
@@ -93,9 +92,9 @@ public class ApiSongController {
 		if (newSong == null || newSong.getAlbumId() == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		Song savedSong = songService.save(songMapper.toSong(newSong));
+		Song savedSong = songService.save(SongMapper.INS_SONG.toSong(newSong));
 		
-		return new ResponseEntity<>(songMapper.toSongDTO(savedSong), HttpStatus.CREATED);
+		return new ResponseEntity<>(SongMapper.INS_SONG.toSongDTO(savedSong), HttpStatus.CREATED);
 	}
 	
 	
@@ -112,8 +111,8 @@ public class ApiSongController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Song persisted = songService.save(songMapper.toSong(songDTO));
+		Song persisted = songService.save(SongMapper.INS_SONG.toSong(songDTO));
 		
-		return new ResponseEntity<>(songMapper.toSongDTO(persisted),HttpStatus.OK);
+		return new ResponseEntity<>(SongMapper.INS_SONG.toSongDTO(persisted),HttpStatus.OK);
 	}
 }

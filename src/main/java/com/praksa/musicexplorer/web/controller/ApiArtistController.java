@@ -1,5 +1,6 @@
 package com.praksa.musicexplorer.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.praksa.musicexplorer.model.Album;
 import com.praksa.musicexplorer.model.Artist;
 import com.praksa.musicexplorer.service.ArtistService;
+import com.praksa.musicexplorer.support.AlbumMapper;
 import com.praksa.musicexplorer.support.ArtistMapper;
+import com.praksa.musicexplorer.web.dto.AlbumDTO;
 import com.praksa.musicexplorer.web.dto.ArtistDTO;
 
 
@@ -38,7 +42,11 @@ public class ApiArtistController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<>(artistMapper.toArtistDTOs(artists), HttpStatus.OK);
+		List<ArtistDTO> artistsDTO = new ArrayList<>();
+		for(Artist a:artists) {
+			artistsDTO.add(ArtistMapper.INS_ARTIST.toArtistDTO(a));
+		}
+		return new ResponseEntity<>(artistsDTO, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
@@ -50,7 +58,7 @@ public class ApiArtistController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<>(artistMapper.toArtistDTO(artist), HttpStatus.OK);
+		return new ResponseEntity<>(ArtistMapper.INS_ARTIST.toArtistDTO(artist), HttpStatus.OK);
 	}
 	
 	
@@ -62,9 +70,9 @@ public class ApiArtistController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Artist savedArtist = artistService.save(artistMapper.toArtist(newArtist));
+		Artist savedArtist = artistService.save(ArtistMapper.INS_ARTIST.toArtist(newArtist));
 		
-		return new ResponseEntity<>(artistMapper.toArtistDTO(savedArtist), HttpStatus.CREATED);
+		return new ResponseEntity<>(ArtistMapper.INS_ARTIST.toArtistDTO(savedArtist), HttpStatus.CREATED);
 	}
 	
 	
@@ -81,9 +89,9 @@ public class ApiArtistController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Artist persisted = artistService.save(artistMapper.toArtist(artistDTO));
+		Artist persisted = artistService.save(ArtistMapper.INS_ARTIST.toArtist(artistDTO));
 		
-		return new ResponseEntity<>(artistMapper.toArtistDTO(persisted),HttpStatus.OK);
+		return new ResponseEntity<>(ArtistMapper.INS_ARTIST.toArtistDTO(persisted),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)

@@ -60,6 +60,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// all other requests need to be authenticated
 				.antMatchers("/register").permitAll()
 				.antMatchers("/getAll").permitAll()
+				.antMatchers("/api/albums").permitAll()
+				.antMatchers("/api/artists").permitAll()
+				.antMatchers("/api/songs").permitAll()
+				.antMatchers("/api/albums/{id}").permitAll()
+				.antMatchers("/api/artists/{id}").permitAll()
+				.antMatchers("/api/songs/{id}").permitAll()
 				.antMatchers("/delete").permitAll().anyRequest().authenticated().and()
 				// make sure we use stateless session; session won't be used to
 				// store user's state.

@@ -25,6 +25,6 @@ public class AlbumDTO {
 	private String publisher;
 	
 	
-	private Integer numberOfSong;
+	private Integer numberOfSongs;
 	
 }

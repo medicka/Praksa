@@ -9,10 +9,12 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name="tbl_like_album")
+@NoArgsConstructor
 public class LikeAlbum {
 	
 	@EmbeddedId
