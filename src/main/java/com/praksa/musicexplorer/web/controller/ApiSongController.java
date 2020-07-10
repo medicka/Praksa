@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.praksa.musicexplorer.model.Song;
 import com.praksa.musicexplorer.service.SongService;
 import com.praksa.musicexplorer.support.SongMapper;
+import com.praksa.musicexplorer.support.SongMapperNoId;
 import com.praksa.musicexplorer.web.dto.SongDTO;
+import com.praksa.musicexplorer.web.dto.SongDTOnoId;
 
 
 
@@ -87,14 +89,14 @@ public class ApiSongController {
 	
 	
 	@RequestMapping(method=RequestMethod.POST, consumes="application/json")
-	public ResponseEntity<SongDTO> add(@Validated @RequestBody SongDTO newSong){
+	public ResponseEntity<SongDTOnoId> add(@Validated @RequestBody SongDTOnoId newSong){
 		
 		if (newSong == null || newSong.getAlbumId() == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		Song savedSong = songService.save(SongMapper.INS_SONG.toSong(newSong));
+		Song savedSong = songService.save(SongMapperNoId.INS_SONG.toSong(newSong));
 		
-		return new ResponseEntity<>(SongMapper.INS_SONG.toSongDTO(savedSong), HttpStatus.CREATED);
+		return new ResponseEntity<>(SongMapperNoId.INS_SONG.toSongDTOnoId(savedSong), HttpStatus.CREATED);
 	}
 	
 	

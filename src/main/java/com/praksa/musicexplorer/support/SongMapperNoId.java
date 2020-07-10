@@ -6,17 +6,18 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import com.praksa.musicexplorer.model.Song;
-import com.praksa.musicexplorer.web.dto.SongDTO;
+import com.praksa.musicexplorer.web.dto.SongDTOnoId;
 
 @Mapper(componentModel = "spring")
-public interface SongMapper {
+public interface SongMapperNoId {
 
-	SongMapper INS_SONG = Mappers.getMapper(SongMapper.class);
+	SongMapperNoId INS_SONG = Mappers.getMapper(SongMapperNoId.class);
 
 	@Mapping(source="album.id", target="albumId")
-	SongDTO toSongDTO(Song song);
+	SongDTOnoId toSongDTOnoId(Song song);
 
 	// List<SongDTO> toSongDTOs(List<Song> song);
 	@Mappings({ @Mapping(target = "album.id", source = "albumId"), @Mapping(target = "likes", ignore = true) })
-	Song toSong(SongDTO songDTO);
+	Song toSong(SongDTOnoId songDTOnoId);
+
 }
